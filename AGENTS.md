@@ -1,7 +1,7 @@
 # PlantUML Editor Project Context
 
 ## Overview
-This is a modern PlantUML editor built with Vue 3 and Vite, featuring a "Liquid Glass" UI design. It allows users to write PlantUML code and see a real-time (debounced) preview of the diagram.
+This is a modern PlantUML editor built with Vue 3 and Vite, featuring a "Liquid Glass" UI design. It allows users to manage multiple PlantUML diagrams simultaneously via tabs, with real-time (debounced) preview.
 
 ## Tech Stack
 - **Framework:** Vue 3 (Composition API, `<script setup>`)
@@ -13,20 +13,30 @@ This is a modern PlantUML editor built with Vue 3 and Vite, featuring a "Liquid 
 - **Preview Interaction:** `panzoom` (Pan and Zoom functionality)
 
 ## Key Files
-- `src/App.vue`: Main application logic. Handles state, editor binding, image URL generation, and layout.
+- `src/App.vue`: Main application logic. Handles state (files, tabs), editor binding, image URL generation, layout resizing, and pan/zoom interactions.
 - `src/style.scss`: Global styles defining the "Liquid Glass" theme (variables, background, typography).
 - `package.json`: Dependencies and scripts.
 
 ## Implementation Details
-- **State Management:** Uses Vue `ref` for code and image URL. Code and editor width are persisted to `localStorage`.
+- **Multi-Tab State Management:** 
+  - Uses `localStorage` to persist an array of file objects (`{ id, name, content }`).
+  - Supports adding, deleting, and renaming diagrams (double-click tab to rename).
+  - Remembers the last active tab and editor width.
 - **Debounce:** Updates to the preview are debounced by 500ms to prevent excessive requests to the PlantUML server.
 - **Preview:** The encoded string is appended to `https://www.plantuml.com/plantuml/svg/` to fetch the SVG.
-- **Zoom/Pan:** The `panzoom` library is initialized on the `.img-wrapper` element within the preview pane.
-- **Syntax Highlighting:** Achieved using `@codemirror/lang-java` for CodeMirror, providing general code highlighting.
-- **Resizable Layout:** Implemented with a custom draggable resizer, allowing users to adjust the width of the editor and preview panes. The chosen width is saved to `localStorage`.
-- **Error Handling:** Errors during encoding or image loading are logged to the browser console.
+- **Zoom/Pan:** 
+  - The `panzoom` library is initialized on the `.img-wrapper` element.
+  - **Auto-Fit:** Double-clicking the preview area calculates the optimal scale and translation to fit the diagram within the viewport (using `panzoom.showRectangle`).
+  - **Unrestricted Panning:** Default bounds are disabled to allow free movement of the diagram.
+- **Syntax Highlighting:** Achieved using `@codemirror/lang-java` for CodeMirror.
+- **Resizable Layout:** Implemented with a custom draggable resizer between the editor and preview panes.
+
+## Recent Changes
+- **Feature:** Added multi-tab support with CRUD operations for diagrams.
+- **Feature:** Implemented "Double-click to Fit" for the preview pane.
+- **Refactor:** Removed experimental "Liquid Glass Cursor" component.
+- **Refactor:** Fixed preview layout constraints to allow full panning.
 
 ## Future Improvements
-- Add local storage persistence.
 - Add support for other PlantUML server endpoints.
 - Add export to PNG/SVG buttons.

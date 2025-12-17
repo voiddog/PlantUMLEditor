@@ -11,3 +11,7 @@ build/
 .env
 coverage/
 .vscode/
+
+# AI
+GEMINI.md
+CLAUDE.md
