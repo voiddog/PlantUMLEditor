@@ -214,61 +214,25 @@ const stopResize = () => {
   document.removeEventListener('mouseup', stopResize)
   document.body.style.cursor = ''
   document.body.style.userSelect = ''
-  localStorage.setItem(STORAGE_KEY_WIDTH, editorWidth.value)
-}
-
-const resetZoom = () => {
-  if (!panzoomInstance || !previewContainer.value) return
+    localStorage.setItem(STORAGE_KEY_WIDTH, editorWidth.value)
+  }
   
-  const imgWrapper = previewContainer.value.querySelector('.img-wrapper')
-  const img = imgWrapper ? imgWrapper.querySelector('img') : null
-  
-  if (!img) return
-
-  // Ensure image is loaded before trying to fit
-  if (!img.complete || img.naturalWidth === 0) {
-    console.warn('Image not loaded yet or invalid dimensions')
-    return
-  }
-
-  const width = img.naturalWidth || img.width
-  const height = img.naturalHeight || img.height
-
-  if (!width || !height) return
-
-  // Use left/top/right/bottom as per some panzoom versions/types
-  const rect = {
-    left: 0,
-    top: 0,
-    right: width,
-    bottom: height
-  }
-
-  try {
-    panzoomInstance.showRectangle(rect)
-  } catch (e) {
-    console.error('panzoom showRectangle error:', e, rect)
-  }
-}
-
-
-// === Lifecycle ===
-onMounted(() => {
-  if (previewContainer.value) {
-    const imgWrapper = previewContainer.value.querySelector('.img-wrapper')
-    if (imgWrapper) {
-       panzoomInstance = panzoom(imgWrapper, {
-         maxZoom: 5,
-         minZoom: 0.1,
-         zoomOnDoubleClick: false
-         // bounds: true, // Removed to allow full panning regardless of container
-         // boundsPadding: 0.1
-       })
+  // === Lifecycle ===
+  onMounted(() => {
+    if (previewContainer.value) {
+      const imgWrapper = previewContainer.value.querySelector('.img-wrapper')
+      if (imgWrapper) {
+         panzoomInstance = panzoom(imgWrapper, {
+           maxZoom: 5,
+           minZoom: 0.1,
+           // zoomOnDoubleClick: false // Default is true, so we can just remove this line or set it to true explicitly if preferred.
+           // bounds: true, // Removed to allow full panning regardless of container
+           // boundsPadding: 0.1
+         })
+      }
     }
-  }
-})
-
-onUnmounted(() => {
+  })
+  onUnmounted(() => {
   document.removeEventListener('mousemove', onResize)
   document.removeEventListener('mouseup', stopResize)
 })
@@ -325,7 +289,7 @@ const extensions = [oneDark, java()]
 
       <div class="preview-pane glass-panel" :style="{ width: (100 - editorWidth) + '%' }">
         <div class="panel-header">Preview</div>
-        <div class="preview-viewport" ref="previewContainer" @dblclick="resetZoom">
+        <div class="preview-viewport" ref="previewContainer">
           <div class="img-wrapper">
             <img :src="imgUrl" alt="PlantUML Diagram" @error="console.error('Image Load Error')" />
           </div>

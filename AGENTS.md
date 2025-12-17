@@ -26,14 +26,14 @@ This is a modern PlantUML editor built with Vue 3 and Vite, featuring a "Liquid 
 - **Preview:** The encoded string is appended to `https://www.plantuml.com/plantuml/svg/` to fetch the SVG.
 - **Zoom/Pan:** 
   - The `panzoom` library is initialized on the `.img-wrapper` element.
-  - **Auto-Fit:** Double-clicking the preview area calculates the optimal scale and translation to fit the diagram within the viewport (using `panzoom.showRectangle`).
+  - **Zoom Interaction:** Double-clicking the preview area zooms in (default behavior restored).
   - **Unrestricted Panning:** Default bounds are disabled to allow free movement of the diagram.
 - **Syntax Highlighting:** Achieved using `@codemirror/lang-java` for CodeMirror.
 - **Resizable Layout:** Implemented with a custom draggable resizer between the editor and preview panes.
 
 ## Recent Changes
 - **Feature:** Added multi-tab support with CRUD operations for diagrams.
-- **Feature:** Implemented "Double-click to Fit" for the preview pane.
+- **Refactor:** Reverted "Double-click to Fit", restored default "Double-click to Zoom".
 - **Refactor:** Removed experimental "Liquid Glass Cursor" component.
 - **Refactor:** Fixed preview layout constraints to allow full panning.
 
